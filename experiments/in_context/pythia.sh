@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PROJECT_DIR=/home/mmosbach/projects/llmft
+export PROJECT_DIR=/llmft
 source $PROJECT_DIR/scripts/misc/setup.sh
 
 # -----------------------------------------------------------------------------------------------------------------------

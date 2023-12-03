@@ -1,7 +1,7 @@
 # Base image must at least have pytorch and CUDA installed.
 # We are using NVIDIA NGC's PyTorch image here, see: https://ngc.nvidia.com/catalog/containers/nvidia:pytorch for latest version
 # See https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html#framework-matrix-2021 for installed python, pytorch, etc. versions
-FROM nvcr.io/nvidia/pytorch:22.08-py3
+FROM nvcr.io/nvidia/pytorch:23.10-py3
 
 # Set path to CUDA
 ENV CUDA_HOME=/usr/local/cuda
@@ -27,28 +27,26 @@ RUN python3 -m pip install --upgrade pip
 ENV LANG C.UTF-8
 
 # Install dependencies 
-RUN python3 -m pip install numpy
-RUN python3 -m pip install matplotlib
-RUN python3 -m pip install pandas
-RUN python3 -m pip install jupyter
-RUN python3 -m pip install ipywidgets
-RUN python3 -m pip install transformers==4.28.0
-RUN python3 -m pip install tokenizers==0.13.3
-RUN python3 -m pip install evaluate==0.3.0
-RUN python3 -m pip install accelerate
-RUN python3 -m pip install deepspeed==0.8.3
-RUN python3 -m pip install datasets==2.11.0
-RUN python3 -m pip install wandb
-RUN python3 -m pip install scikit-learn
-RUN python3 -m pip install scipy
-RUN python3 -m pip install bitsandbytes
-RUN python3 -m pip install sentencepiece
-
-# Install additional dependencies
-RUN python3 -m pip install autopep8
-RUN python3 -m pip install black
-RUN python3 -m pip install attrdict
-RUN python3 -m pip install pylint
+RUN python3 -m pip install numpy \
+    matplotlib \
+    pandas \
+    jupyter \
+    ipywidgets \
+    transformers \
+    tokenizers \
+    evaluate \
+    accelerate \
+    deepspeed \
+    datasets \
+    wandb \
+    scikit-learn \
+    scipy \
+    bitsandbytes \
+    sentencepiece \
+    autopep8 \
+    black \
+    attrdict \
+    pylint
 
 # Specify a new user (USER_NAME and USER_UID are specified via --build-arg)
 ARG USER_UID

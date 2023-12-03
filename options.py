@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass, field, fields
 from enum import Enum
 from typing import Optional
@@ -18,8 +19,8 @@ SUPPORTED_MODELS = [
     "facebook/opt-66b",
 
     # Path to LLaMA models
-    "/home/mmosbach/cache/llama/hf/7B",
-    "/home/mmosbach/cache/llama/hf/13B",
+    f"{os.environ['HOME']}/cache/llama/hf/7B",
+    f"{os.environ['HOME']}/cache/llama/hf/13B",
 
     # GPT-NeoX
     "EleutherAI/gpt-neox-20b",
