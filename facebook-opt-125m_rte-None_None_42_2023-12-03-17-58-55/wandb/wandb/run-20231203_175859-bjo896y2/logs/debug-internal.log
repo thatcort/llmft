@@ -1,0 +1,190 @@
+2023-12-03 17:58:59,277 INFO    StreamThr :88578 [internal.py:wandb_internal():86] W&B internal server running at pid: 88578, started at: 2023-12-03 17:58:59.276720
+2023-12-03 17:58:59,278 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: status
+2023-12-03 17:58:59,280 INFO    WriterThread:88578 [datastore.py:open_for_write():85] open: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/run-bjo896y2.wandb
+2023-12-03 17:58:59,280 DEBUG   SenderThread:88578 [sender.py:send():380] send: header
+2023-12-03 17:58:59,303 DEBUG   SenderThread:88578 [sender.py:send():380] send: run
+2023-12-03 17:58:59,692 INFO    SenderThread:88578 [dir_watcher.py:__init__():211] watching files in: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files
+2023-12-03 17:58:59,692 INFO    SenderThread:88578 [sender.py:_start_run_threads():1124] run started: bjo896y2 with start time 1701644339.273476
+2023-12-03 17:58:59,696 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: check_version
+2023-12-03 17:58:59,697 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: check_version
+2023-12-03 17:59:00,018 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: run_start
+2023-12-03 17:59:00,039 DEBUG   HandlerThread:88578 [system_info.py:__init__():32] System info init
+2023-12-03 17:59:00,039 DEBUG   HandlerThread:88578 [system_info.py:__init__():47] System info init done
+2023-12-03 17:59:00,039 INFO    HandlerThread:88578 [system_monitor.py:start():194] Starting system monitor
+2023-12-03 17:59:00,039 INFO    SystemMonitor:88578 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2023-12-03 17:59:00,039 INFO    HandlerThread:88578 [system_monitor.py:probe():214] Collecting system info
+2023-12-03 17:59:00,040 INFO    SystemMonitor:88578 [interfaces.py:start():190] Started cpu monitoring
+2023-12-03 17:59:00,041 INFO    SystemMonitor:88578 [interfaces.py:start():190] Started disk monitoring
+2023-12-03 17:59:00,041 DEBUG   HandlerThread:88578 [system_info.py:probe():196] Probing system
+2023-12-03 17:59:00,043 INFO    SystemMonitor:88578 [interfaces.py:start():190] Started gpuapple monitoring
+2023-12-03 17:59:00,047 INFO    SystemMonitor:88578 [interfaces.py:start():190] Started memory monitoring
+2023-12-03 17:59:00,048 INFO    SystemMonitor:88578 [interfaces.py:start():190] Started network monitoring
+2023-12-03 17:59:00,054 DEBUG   HandlerThread:88578 [system_info.py:_probe_git():181] Probing git
+2023-12-03 17:59:00,108 DEBUG   HandlerThread:88578 [system_info.py:_probe_git():189] Probing git done
+2023-12-03 17:59:00,108 DEBUG   HandlerThread:88578 [system_info.py:probe():244] Probing system done
+2023-12-03 17:59:00,108 DEBUG   HandlerThread:88578 [system_monitor.py:probe():223] {'os': 'macOS-13.6.2-arm64-arm-64bit', 'python': '3.10.5', 'heartbeatAt': '2023-12-03T22:59:00.041560', 'startedAt': '2023-12-03T22:58:59.267990', 'docker': None, 'cuda': None, 'args': ('--model_name_or_path', 'facebook/opt-125m', '--output_dir', './', '--task_name', 'rte'), 'state': 'running', 'program': '/Users/liqi/Downloads/llmft/ft.py', 'codePathLocal': 'ft.py', 'codePath': 'ft.py', 'git': {'remote': 'https://github.com/thatcort/llmft.git', 'commit': '3acc3894fa4111d9155190a98a147e3e664ff3da'}, 'email': '141791997+ql3db@users.noreply.github.com', 'root': '/Users/liqi/Downloads/llmft', 'host': 'rikis-MBP.lan', 'username': 'liqi', 'executable': '/Users/liqi/miniforge3/envs/moon/bin/python', 'cpu_count': 8, 'cpu_count_logical': 8, 'disk': {'/': {'total': 460.4317207336426, 'used': 8.531822204589844}}, 'gpuapple': {'type': 'arm', 'vendor': 'Apple'}, 'memory': {'total': 16.0}}
+2023-12-03 17:59:00,108 INFO    HandlerThread:88578 [system_monitor.py:probe():224] Finished collecting system info
+2023-12-03 17:59:00,108 INFO    HandlerThread:88578 [system_monitor.py:probe():227] Publishing system info
+2023-12-03 17:59:00,108 DEBUG   HandlerThread:88578 [system_info.py:_save_pip():52] Saving list of pip packages installed into the current environment
+2023-12-03 17:59:00,109 DEBUG   HandlerThread:88578 [system_info.py:_save_pip():68] Saving pip packages done
+2023-12-03 17:59:00,109 DEBUG   HandlerThread:88578 [system_info.py:_save_conda():75] Saving list of conda packages installed into the current environment
+2023-12-03 17:59:00,702 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_created():271] file/dir created: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/conda-environment.yaml
+2023-12-03 17:59:00,703 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_created():271] file/dir created: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/requirements.txt
+2023-12-03 17:59:01,129 DEBUG   HandlerThread:88578 [system_info.py:_save_conda():87] Saving conda packages done
+2023-12-03 17:59:01,131 INFO    HandlerThread:88578 [system_monitor.py:probe():229] Finished publishing system info
+2023-12-03 17:59:01,136 DEBUG   SenderThread:88578 [sender.py:send():380] send: files
+2023-12-03 17:59:01,136 INFO    SenderThread:88578 [sender.py:_save_file():1380] saving file wandb-metadata.json with policy now
+2023-12-03 17:59:01,139 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: stop_status
+2023-12-03 17:59:01,139 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: stop_status
+2023-12-03 17:59:01,140 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: internal_messages
+2023-12-03 17:59:01,503 DEBUG   SenderThread:88578 [sender.py:send():380] send: telemetry
+2023-12-03 17:59:01,504 DEBUG   SenderThread:88578 [sender.py:send():380] send: config
+2023-12-03 17:59:01,505 DEBUG   SenderThread:88578 [sender.py:send():380] send: metric
+2023-12-03 17:59:01,505 DEBUG   SenderThread:88578 [sender.py:send():380] send: telemetry
+2023-12-03 17:59:01,505 DEBUG   SenderThread:88578 [sender.py:send():380] send: metric
+2023-12-03 17:59:01,506 WARNING SenderThread:88578 [sender.py:send_metric():1331] Seen metric with glob (shouldn't happen)
+2023-12-03 17:59:01,506 DEBUG   SenderThread:88578 [sender.py:send():380] send: telemetry
+2023-12-03 17:59:01,506 DEBUG   SenderThread:88578 [sender.py:send():380] send: exit
+2023-12-03 17:59:01,506 INFO    SenderThread:88578 [sender.py:send_exit():585] handling exit code: 0
+2023-12-03 17:59:01,507 INFO    SenderThread:88578 [sender.py:send_exit():587] handling runtime: 1
+2023-12-03 17:59:01,507 INFO    SenderThread:88578 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2023-12-03 17:59:01,508 INFO    SenderThread:88578 [sender.py:send_exit():593] send defer
+2023-12-03 17:59:01,508 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,508 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 0
+2023-12-03 17:59:01,508 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,508 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 0
+2023-12-03 17:59:01,508 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 1
+2023-12-03 17:59:01,508 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,508 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 1
+2023-12-03 17:59:01,509 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,509 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 1
+2023-12-03 17:59:01,509 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 2
+2023-12-03 17:59:01,509 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,509 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 2
+2023-12-03 17:59:01,509 INFO    HandlerThread:88578 [system_monitor.py:finish():203] Stopping system monitor
+2023-12-03 17:59:01,509 DEBUG   SystemMonitor:88578 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2023-12-03 17:59:01,509 DEBUG   SystemMonitor:88578 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2023-12-03 17:59:01,509 DEBUG   SystemMonitor:88578 [system_monitor.py:_start():183] Publishing last batch of metrics
+2023-12-03 17:59:01,509 INFO    HandlerThread:88578 [interfaces.py:finish():202] Joined cpu monitor
+2023-12-03 17:59:01,510 INFO    HandlerThread:88578 [interfaces.py:finish():202] Joined disk monitor
+2023-12-03 17:59:01,510 INFO    HandlerThread:88578 [interfaces.py:finish():202] Joined gpuapple monitor
+2023-12-03 17:59:01,511 INFO    HandlerThread:88578 [interfaces.py:finish():202] Joined memory monitor
+2023-12-03 17:59:01,511 INFO    HandlerThread:88578 [interfaces.py:finish():202] Joined network monitor
+2023-12-03 17:59:01,511 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,511 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 2
+2023-12-03 17:59:01,511 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 3
+2023-12-03 17:59:01,512 DEBUG   SenderThread:88578 [sender.py:send():380] send: telemetry
+2023-12-03 17:59:01,512 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,512 DEBUG   SenderThread:88578 [sender.py:send():380] send: stats
+2023-12-03 17:59:01,512 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 3
+2023-12-03 17:59:01,518 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,518 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 3
+2023-12-03 17:59:01,518 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 4
+2023-12-03 17:59:01,519 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,519 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 4
+2023-12-03 17:59:01,519 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,519 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 4
+2023-12-03 17:59:01,519 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 5
+2023-12-03 17:59:01,519 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,519 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 5
+2023-12-03 17:59:01,520 DEBUG   SenderThread:88578 [sender.py:send():380] send: summary
+2023-12-03 17:59:01,521 INFO    SenderThread:88578 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2023-12-03 17:59:01,521 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,521 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 5
+2023-12-03 17:59:01,521 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 6
+2023-12-03 17:59:01,522 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,522 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 6
+2023-12-03 17:59:01,522 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,522 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 6
+2023-12-03 17:59:01,527 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: status_report
+2023-12-03 17:59:01,628 INFO    wandb-upload_0:88578 [upload_job.py:push():131] Uploaded file /var/folders/08/m24ckhc11bld_qt1d1x4_xb00000gn/T/tmp_g1zxl41wandb/2bxp2z9h-wandb-metadata.json
+2023-12-03 17:59:01,721 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_modified():288] file/dir modified: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/conda-environment.yaml
+2023-12-03 17:59:01,722 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_created():271] file/dir created: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/wandb-metadata.json
+2023-12-03 17:59:01,722 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_created():271] file/dir created: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/wandb-summary.json
+2023-12-03 17:59:01,722 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_created():271] file/dir created: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/output.log
+2023-12-03 17:59:01,729 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 7
+2023-12-03 17:59:01,729 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:01,729 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 7
+2023-12-03 17:59:01,729 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:01,729 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 7
+2023-12-03 17:59:02,226 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: poll_exit
+2023-12-03 17:59:02,723 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_modified():288] file/dir modified: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/config.yaml
+2023-12-03 17:59:03,547 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 8
+2023-12-03 17:59:03,547 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: poll_exit
+2023-12-03 17:59:03,548 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:03,548 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 8
+2023-12-03 17:59:03,548 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:03,548 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 8
+2023-12-03 17:59:03,548 INFO    SenderThread:88578 [job_builder.py:build():298] Attempting to build job artifact
+2023-12-03 17:59:03,548 INFO    SenderThread:88578 [job_builder.py:_get_source_type():428] is repo sourced job
+2023-12-03 17:59:03,566 INFO    SenderThread:88578 [job_builder.py:build():404] adding wandb-job metadata file
+2023-12-03 17:59:03,569 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 9
+2023-12-03 17:59:03,569 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:03,569 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 9
+2023-12-03 17:59:03,569 DEBUG   SenderThread:88578 [sender.py:send():380] send: artifact
+2023-12-03 17:59:03,726 INFO    Thread-12 :88578 [dir_watcher.py:_on_file_modified():288] file/dir modified: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/output.log
+2023-12-03 17:59:03,964 INFO    SenderThread:88578 [sender.py:send_artifact():1458] sent artifact job-https___github.com_thatcort_llmft.git_ft.py - {'id': 'QXJ0aWZhY3Q6NjU1NjY5MjA0', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjEyMDQwMTQ0Mg==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NjU1NjY5MjA0', 'versionIndex': 0}}}
+2023-12-03 17:59:03,964 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:03,964 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 9
+2023-12-03 17:59:03,964 INFO    SenderThread:88578 [dir_watcher.py:finish():358] shutting down directory watcher
+2023-12-03 17:59:04,728 INFO    SenderThread:88578 [dir_watcher.py:finish():388] scan: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files
+2023-12-03 17:59:04,728 INFO    SenderThread:88578 [dir_watcher.py:finish():402] scan save: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/requirements.txt requirements.txt
+2023-12-03 17:59:04,729 INFO    SenderThread:88578 [dir_watcher.py:finish():402] scan save: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/output.log output.log
+2023-12-03 17:59:04,731 INFO    SenderThread:88578 [dir_watcher.py:finish():402] scan save: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/config.yaml config.yaml
+2023-12-03 17:59:04,738 INFO    SenderThread:88578 [dir_watcher.py:finish():402] scan save: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/wandb-summary.json wandb-summary.json
+2023-12-03 17:59:04,738 INFO    SenderThread:88578 [dir_watcher.py:finish():402] scan save: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/conda-environment.yaml conda-environment.yaml
+2023-12-03 17:59:04,742 INFO    SenderThread:88578 [dir_watcher.py:finish():402] scan save: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/wandb-metadata.json wandb-metadata.json
+2023-12-03 17:59:04,742 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 10
+2023-12-03 17:59:04,744 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:04,745 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 10
+2023-12-03 17:59:04,745 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:04,745 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 10
+2023-12-03 17:59:04,746 INFO    SenderThread:88578 [file_pusher.py:finish():175] shutting down file pusher
+2023-12-03 17:59:04,984 INFO    wandb-upload_0:88578 [upload_job.py:push():131] Uploaded file ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/requirements.txt
+2023-12-03 17:59:05,176 INFO    wandb-upload_4:88578 [upload_job.py:push():131] Uploaded file ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/conda-environment.yaml
+2023-12-03 17:59:05,280 INFO    wandb-upload_1:88578 [upload_job.py:push():131] Uploaded file ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/output.log
+2023-12-03 17:59:05,385 INFO    wandb-upload_2:88578 [upload_job.py:push():131] Uploaded file ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/config.yaml
+2023-12-03 17:59:05,395 INFO    wandb-upload_3:88578 [upload_job.py:push():131] Uploaded file ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/files/wandb-summary.json
+2023-12-03 17:59:05,597 INFO    Thread-11 (_thread_body):88578 [sender.py:transition_state():613] send defer: 11
+2023-12-03 17:59:05,598 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:05,598 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 11
+2023-12-03 17:59:05,598 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:05,598 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 11
+2023-12-03 17:59:05,598 INFO    SenderThread:88578 [file_pusher.py:join():181] waiting for file pusher
+2023-12-03 17:59:05,598 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 12
+2023-12-03 17:59:05,598 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:05,598 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 12
+2023-12-03 17:59:05,599 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:05,599 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 12
+2023-12-03 17:59:05,599 INFO    SenderThread:88578 [file_stream.py:finish():595] file stream finish called
+2023-12-03 17:59:05,678 INFO    SenderThread:88578 [file_stream.py:finish():599] file stream finish is done
+2023-12-03 17:59:05,678 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 13
+2023-12-03 17:59:05,678 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:05,678 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 13
+2023-12-03 17:59:05,679 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:05,679 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 13
+2023-12-03 17:59:05,679 INFO    SenderThread:88578 [sender.py:transition_state():613] send defer: 14
+2023-12-03 17:59:05,679 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: defer
+2023-12-03 17:59:05,679 INFO    HandlerThread:88578 [handler.py:handle_request_defer():172] handle defer: 14
+2023-12-03 17:59:05,679 DEBUG   SenderThread:88578 [sender.py:send():380] send: final
+2023-12-03 17:59:05,680 DEBUG   SenderThread:88578 [sender.py:send():380] send: footer
+2023-12-03 17:59:05,680 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: defer
+2023-12-03 17:59:05,680 INFO    SenderThread:88578 [sender.py:send_request_defer():609] handle sender defer: 14
+2023-12-03 17:59:05,680 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: poll_exit
+2023-12-03 17:59:05,681 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: poll_exit
+2023-12-03 17:59:05,681 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: server_info
+2023-12-03 17:59:05,682 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: get_summary
+2023-12-03 17:59:05,682 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: sampled_history
+2023-12-03 17:59:05,682 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: internal_messages
+2023-12-03 17:59:05,682 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: server_info
+2023-12-03 17:59:05,686 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: job_info
+2023-12-03 17:59:05,752 DEBUG   SenderThread:88578 [sender.py:send_request():407] send_request: job_info
+2023-12-03 17:59:05,755 INFO    MainThread:88578 [wandb_run.py:_footer_history_summary_info():3760] rendering history
+2023-12-03 17:59:05,755 INFO    MainThread:88578 [wandb_run.py:_footer_history_summary_info():3792] rendering summary
+2023-12-03 17:59:05,756 INFO    MainThread:88578 [wandb_run.py:_footer_sync_info():3719] logging synced files
+2023-12-03 17:59:05,756 DEBUG   HandlerThread:88578 [handler.py:handle_request():146] handle_request: shutdown
+2023-12-03 17:59:05,756 INFO    HandlerThread:88578 [handler.py:finish():866] shutting down handler
+2023-12-03 17:59:06,693 INFO    WriterThread:88578 [datastore.py:close():294] close: ./facebook-opt-125m_rte-None_None_42_2023-12-03-17-58-55/wandb/wandb/run-20231203_175859-bjo896y2/run-bjo896y2.wandb
+2023-12-03 17:59:06,756 INFO    SenderThread:88578 [sender.py:finish():1536] shutting down sender
+2023-12-03 17:59:06,756 INFO    SenderThread:88578 [file_pusher.py:finish():175] shutting down file pusher
+2023-12-03 17:59:06,756 INFO    SenderThread:88578 [file_pusher.py:join():181] waiting for file pusher

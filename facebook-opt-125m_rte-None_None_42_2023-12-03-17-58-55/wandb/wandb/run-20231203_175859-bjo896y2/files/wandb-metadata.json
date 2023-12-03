@@ -1,0 +1,44 @@
+{
+    "os": "macOS-13.6.2-arm64-arm-64bit",
+    "python": "3.10.5",
+    "heartbeatAt": "2023-12-03T22:59:00.041560",
+    "startedAt": "2023-12-03T22:58:59.267990",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--model_name_or_path",
+        "facebook/opt-125m",
+        "--output_dir",
+        "./",
+        "--task_name",
+        "rte"
+    ],
+    "state": "running",
+    "program": "/Users/liqi/Downloads/llmft/ft.py",
+    "codePathLocal": "ft.py",
+    "codePath": "ft.py",
+    "git": {
+        "remote": "https://github.com/thatcort/llmft.git",
+        "commit": "3acc3894fa4111d9155190a98a147e3e664ff3da"
+    },
+    "email": "141791997+ql3db@users.noreply.github.com",
+    "root": "/Users/liqi/Downloads/llmft",
+    "host": "rikis-MBP.lan",
+    "username": "liqi",
+    "executable": "/Users/liqi/miniforge3/envs/moon/bin/python",
+    "cpu_count": 8,
+    "cpu_count_logical": 8,
+    "disk": {
+        "/": {
+            "total": 460.4317207336426,
+            "used": 8.531822204589844
+        }
+    },
+    "gpuapple": {
+        "type": "arm",
+        "vendor": "Apple"
+    },
+    "memory": {
+        "total": 16.0
+    }
+}

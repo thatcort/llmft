@@ -23,9 +23,13 @@ from transformers.trainer_pt_utils import (
     nested_xla_mesh_reduce,
     reissue_pt_warnings,
 )
-from transformers.trainer_utils import ShardedDDPOption, speed_metrics, has_length, HPSearchBackend, TrainOutput, EvalLoopOutput, denumpify_detensorize
+# from transformers.trainer_utils import ShardedDDPOption, speed_metrics, has_length, HPSearchBackend, TrainOutput, EvalLoopOutput, denumpify_detensorize
+from transformers.trainer_utils import FSDPOption, speed_metrics, has_length, HPSearchBackend, TrainOutput, EvalLoopOutput, denumpify_detensorize
+
 from transformers.utils import is_torch_tpu_available, is_sagemaker_mp_enabled, is_apex_available
-from transformers.integrations import TensorBoardCallback, WandbCallback, is_fairscale_available, hp_params
+# from transformers.integrations import TensorBoardCallback, WandbCallback, is_fairscale_available, hp_params
+from transformers.integrations import TensorBoardCallback, WandbCallback, hp_params
+
 from transformers.debug_utils import DebugOption, DebugUnderflowOverflow
 from transformers.deepspeed import deepspeed_init
 from transformers.trainer_callback import TrainerState
@@ -61,8 +65,10 @@ if is_torch_tpu_available(check_device=False):
     import torch_xla.debug.metrics as met
     import torch_xla.distributed.parallel_loader as pl
 
-if is_fairscale_available():
-    from fairscale.optim import OSS
+# if is_fairscale_available():
+    # from fairscale.optim import OSS
+from fairscale.optim import OSS
+
 
 if is_sagemaker_mp_enabled():
     import smdistributed.modelparallel.torch as smp
@@ -258,7 +264,8 @@ class FtTrainer(Trainer):
         self.data_args = data_args
         self.ft_args = ft_args
 
-        if os.environ["WANDB_DISABLED"] == "false":
+        # if os.environ["WANDB_DISABLED"] == "false":
+        if self.wandb_args.disable_wandb == False:
             wandb_callback = FtWandbCallback()
             wandb_callback.setup(self.args, self.state,
                                  self.model, self.wandb_args, self.data_args, self.ft_args)

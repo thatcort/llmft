@@ -589,7 +589,9 @@ def main():
     # Get the metric function
     if data_args.task_name is not None:
         # use default metrics
-        metric_script = f"{os.environ['PROJECT_DIR']}/metrics/glue.py"
+        # metric_script = f"{os.environ['PROJECT_DIR']}/metrics/glue.py"
+        metric_script = "/Users/liqi/Downloads/llmft/metrics/glue.py"
+
         if data_args.task_name == "mnli-original":
             metric = datasets.load_metric(path=metric_script, config_name="mnli",
                                           cache_dir=data_args.dataset_cache_dir, keep_in_memory=False)

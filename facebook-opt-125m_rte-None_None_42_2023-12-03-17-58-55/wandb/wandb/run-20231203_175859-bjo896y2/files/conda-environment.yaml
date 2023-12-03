@@ -1,0 +1,4 @@
+name: moon
+channels:
+  - defaults
+prefix: /Users/liqi/opt/anaconda3/envs/moon
