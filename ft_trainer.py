@@ -425,15 +425,15 @@ class FtTrainer(Trainer):
             else:
                 debug_overflow = DebugUnderflowOverflow(self.model)  # noqa
 
-        delay_optimizer_creation = (
-            self.sharded_ddp is not None
-            and self.sharded_ddp != ShardedDDPOption.SIMPLE
-            or is_sagemaker_mp_enabled()
-            or self.fsdp is not None
-        )
+        delay_optimizer_creation = False # (
+        #     self.sharded_ddp is not None
+        #     and self.sharded_ddp != ShardedDDPOption.SIMPLE
+        #     or is_sagemaker_mp_enabled()
+        #     or self.fsdp is not None
+        # )
         if args.deepspeed:
             deepspeed_engine, optimizer, lr_scheduler = deepspeed_init(
-                self, num_training_steps=max_steps, resume_from_checkpoint=resume_from_checkpoint
+                self, num_training_steps=max_steps
             )
             self.model = deepspeed_engine.module
             self.model_wrapped = deepspeed_engine
