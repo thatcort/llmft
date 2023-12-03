@@ -23,9 +23,9 @@ from transformers.trainer_pt_utils import (
     nested_xla_mesh_reduce,
     reissue_pt_warnings,
 )
-from transformers.trainer_utils import ShardedDDPOption, speed_metrics, has_length, HPSearchBackend, TrainOutput, EvalLoopOutput, denumpify_detensorize
+from transformers.trainer_utils import speed_metrics, has_length, HPSearchBackend, TrainOutput, EvalLoopOutput, denumpify_detensorize
 from transformers.utils import is_torch_tpu_available, is_sagemaker_mp_enabled, is_apex_available
-from transformers.integrations import TensorBoardCallback, WandbCallback, is_fairscale_available, hp_params
+from transformers.integrations import TensorBoardCallback, WandbCallback, hp_params
 from transformers.debug_utils import DebugOption, DebugUnderflowOverflow
 from transformers.deepspeed import deepspeed_init
 from transformers.trainer_callback import TrainerState
@@ -60,9 +60,6 @@ if is_torch_tpu_available(check_device=False):
     import torch_xla.core.xla_model as xm
     import torch_xla.debug.metrics as met
     import torch_xla.distributed.parallel_loader as pl
-
-if is_fairscale_available():
-    from fairscale.optim import OSS
 
 if is_sagemaker_mp_enabled():
     import smdistributed.modelparallel.torch as smp
@@ -344,26 +341,26 @@ class FtTrainer(Trainer):
             optimizer_cls, optimizer_kwargs = Trainer.get_optimizer_cls_and_kwargs(
                 self.args)
 
-            if self.sharded_ddp == ShardedDDPOption.SIMPLE:
-                self.optimizer = OSS(
-                    params=optimizer_grouped_parameters,
-                    optim=optimizer_cls,
-                    **optimizer_kwargs,
-                )
-            else:
-                self.optimizer = optimizer_cls(
-                    optimizer_grouped_parameters, **optimizer_kwargs)
-                if optimizer_cls.__name__ == "Adam8bit":
-                    import bitsandbytes
+            # if self.sharded_ddp == ShardedDDPOption.SIMPLE:
+            #     self.optimizer = OSS(
+            #         params=optimizer_grouped_parameters,
+            #         optim=optimizer_cls,
+            #         **optimizer_kwargs,
+            #     )
+            # else:
+            self.optimizer = optimizer_cls(
+                optimizer_grouped_parameters, **optimizer_kwargs)
+            if optimizer_cls.__name__ == "Adam8bit":
+                import bitsandbytes
 
-                    manager = bitsandbytes.optim.GlobalOptimManager.get_instance()
+                manager = bitsandbytes.optim.GlobalOptimManager.get_instance()
 
-                    for module in opt_model.modules():
-                        if isinstance(module, nn.Embedding):
-                            manager.register_module_override(
-                                module, "weight", {"optim_bits": 32})
-                            logger.debug(
-                                f"bitsandbytes: will optimize {module} in fp32")
+                for module in opt_model.modules():
+                    if isinstance(module, nn.Embedding):
+                        manager.register_module_override(
+                            module, "weight", {"optim_bits": 32})
+                        logger.debug(
+                            f"bitsandbytes: will optimize {module} in fp32")
 
         if is_sagemaker_mp_enabled():
             self.optimizer = smp.DistributedOptimizer(self.optimizer)
@@ -907,7 +904,7 @@ class FtTrainer(Trainer):
             # XXX: eval doesn't have `resume_from_checkpoint` arg but we should be able to do eval
             # from the checkpoint eventually
             deepspeed_engine, _, _ = deepspeed_init(
-                self, num_training_steps=0, resume_from_checkpoint=None, inference=True
+                self, num_training_steps=0, inference=True
             )
             self.model = deepspeed_engine.module
             self.model_wrapped = deepspeed_engine
