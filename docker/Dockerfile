@@ -1,7 +1,7 @@
 # Base image must at least have pytorch and CUDA installed.
 # We are using NVIDIA NGC's PyTorch image here, see: https://ngc.nvidia.com/catalog/containers/nvidia:pytorch for latest version
 # See https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html#framework-matrix-2021 for installed python, pytorch, etc. versions
-FROM nvcr.io/nvidia/pytorch:23.10-py3
+FROM nvcr.io/nvidia/pytorch:23.07-py3
 
 # Set path to CUDA
 ENV CUDA_HOME=/usr/local/cuda
