@@ -51,6 +51,7 @@ import time
 import math
 import sys
 from tqdm.auto import tqdm
+import deepspeed
 
 if is_apex_available():
     from apex import amp
@@ -269,6 +270,7 @@ class FtTrainer(Trainer):
         #     or self.fsdp is not None
         # )
         if args.deepspeed:
+            deepspeed_engine = deepspeed.initialize(model=self.model, config=self.args.deepspeed)[0]
             deepspeed_engine, optimizer, lr_scheduler = deepspeed_init(
                 self, num_training_steps=max_steps
             )
@@ -740,7 +742,8 @@ class FtTrainer(Trainer):
         if args.deepspeed and not self.deepspeed:
             # XXX: eval doesn't have `resume_from_checkpoint` arg but we should be able to do eval
             # from the checkpoint eventually
-            deepspeed_engine, _, _ = deepspeed_init(
+            deepspeed_engine = deepspeed.initialize(model=self.model, config=self.args.deepspeed)[0]
+            _, _ = deepspeed_init(
                 self, num_training_steps=0, inference=True
             )
             self.model = deepspeed_engine.module

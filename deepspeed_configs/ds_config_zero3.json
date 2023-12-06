@@ -33,10 +33,9 @@
         "contiguous_gradients": true,
         "reduce_bucket_size": 1e6
     },
-    "gradient_accumulation_steps": "auto",
+    "gradient_accumulation_steps": 1,
     "gradient_clipping": "auto",
     "steps_per_print": 100,
-    "train_batch_size": "auto",
-    "train_micro_batch_size_per_gpu": "auto",
+    "train_micro_batch_size_per_gpu": 32,
     "wall_clock_breakdown": false
 }
