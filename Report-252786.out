@@ -1,0 +1,23 @@
+---------------------------------------
+Begin Slurm Prolog: Dec-08-2023 13:22:37
+Job ID:    252786
+User ID:   afischer39
+Account:   no-dept
+Job name:  GPUExample
+Partition: coc-gpu
+---------------------------------------
+usage: conda [-h] [--no-plugins] [-V] COMMAND ...
+conda: error: argument COMMAND: invalid choice: 'activate' (choose from 'clean', 'compare', 'config', 'create', 'info', 'init', 'install', 'list', 'notices', 'package', 'remove', 'uninstall', 'rename', 'run', 'search', 'update', 'upgrade', 'build', 'content-trust', 'convert', 'debug', 'develop', 'doctor', 'index', 'inspect', 'metapackage', 'render', 'skeleton', 'verify', 'env', 'token', 'server', 'repo', 'pack')
+srun: fatal: SLURM_MEM_PER_CPU, SLURM_MEM_PER_GPU, and SLURM_MEM_PER_NODE are mutually exclusive.
+---------------------------------------
+Begin Slurm Epilog: Dec-08-2023 13:22:52
+Job ID:        252786
+Array Job ID:  _4294967294
+User ID:       afischer39
+Account:       no-dept
+Job name:      GPUExample
+Resources:     cpu=6,gres/gpu:v100=1,mem=24G,node=1
+Rsrc Used:     cput=00:01:30,vmem=68364K,walltime=00:00:15,mem=0,energy_used=0
+Partition:     coc-gpu
+Nodes:         atl1-1-02-009-32-0
+---------------------------------------
