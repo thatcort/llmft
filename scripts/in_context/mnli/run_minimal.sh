@@ -3,6 +3,8 @@
 OUTPUT_DIR=$HOME/logs/llmft/logfiles/in_context_eval
 mkdir -p $OUTPUT_DIR
 
+PROJECT_DIR = /storage/ice1/6/5/afischer39/llmft
+
 # args: task_name, num_shots, model_name_or_path, gpu, port
 
 task_name=$1
@@ -35,7 +37,7 @@ port=$5
 # --separate_shots_by "\n\n" \
 # --group "eval-harness" \
 
-for data_seed in 0 1 2 3 4 5 6 7 8 9
+for data_seed in 0 #1 2 3 4 5 6 7 8 9
 do
     deepspeed \
         --include localhost:0 \
