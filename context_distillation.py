@@ -40,14 +40,14 @@ class ContextDistillationTrainer(Trainer):
         self.distillation_weight = distillation_weight
         self.student_loss_fn = student_loss_fn
     
-    
+
     def compute_loss(self, model, inputs, return_outputs=False):
         with torch.no_grad():
             teacher_logits = self.teacher(inputs)
         
         student_logits = model(inputs)
 
-        teacher_out = nn.functional.softmax(teacher_logits, dim=-1)
+        teacher_out = nn.functional.log_softmax(teacher_logits, dim=-1)
         student_out = nn.functional.log_softmax(student_logits, dim=-1)
 
         teacher_loss = F.kl_div(student_out, teacher_out)
@@ -55,7 +55,7 @@ class ContextDistillationTrainer(Trainer):
         labels = inputs.pop("labels")
         student_loss = self.student_loss_fn(student_logits, labels)
 
-        loss = self.distillation_weight * teacher_loss + (1. - student_loss) * student_loss
+        loss = self.distillation_weight * teacher_loss + (1. - self.distillation_weight) * student_loss
 
         return (loss, student_out) if return_outputs else loss
 
