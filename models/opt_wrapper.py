@@ -1,5 +1,5 @@
 import math
-import deepspeed
+# import deepspeed
 from typing import Optional, Tuple, Union, List
 
 import torch
@@ -13,7 +13,7 @@ from transformers.modeling_outputs import SequenceClassifierOutputWithPast, Caus
 
 from transformers.utils import logging
 
-from transformers.deepspeed import is_deepspeed_zero3_enabled
+# from transformers.deepspeed import is_deepspeed_zero3_enabled
 
 logger = logging.get_logger(__name__)
 
