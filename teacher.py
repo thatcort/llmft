@@ -54,12 +54,9 @@ context, contex_indices = create_few_shot_context(
 )
 pattern = f"{context}{in_context_args.pattern}"
 
-
 examples = raw_datasets['train']
 
 sentence1_key, sentence2_key = task_to_keys[data_args.task_name]
-print(sentence1_key)
-
 pattern_examples = [
     pattern.format(
         text1=examples[sentence1_key][idx],
@@ -71,9 +68,9 @@ pattern_examples
 
 #### modeling
 
-from models.opt_wrapper import OPTWithClassifier, OPTWithLMClassifier
-from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed, Trainer, TrainingArguments, BitsAndBytesConfig, \
-    DataCollatorForLanguageModeling, Trainer, TrainingArguments, AutoConfig
+# from models.opt_wrapper import OPTWithClassifier, OPTWithLMClassifier
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig #,set_seed, Trainer, TrainingArguments, BitsAndBytesConfig, DataCollatorForLanguageModeling, Trainer, TrainingArguments
 # print("Libraries imported")
 
 num_labels=2
@@ -99,6 +96,7 @@ def load_model(model_name,dataset_name):
                 use_auth_token= None,
                 ignore_mismatched_sizes=False
             )
+        model.eval()
         tokenizer = AutoTokenizer.from_pretrained(
                 model_name,
                 cache_dir=data_args.dataset_cache_dir,
@@ -116,17 +114,27 @@ print(tokenizer)
 
 outputs = {}
 for i, prompt in enumerate(pattern_examples[:limit]):
+
+    inputs = tokenizer.encode(prompt, return_tensors="pt")
+
+    logits = model(inputs).logits
+    probabilities = torch.nn.functional.softmax(logits, dim=-1)
+    # print(logits)
+    topk_values, topk_indices = torch.topk(probabilities, 3, dim=-1)
+    print(topk_values, topk_indices)
+
     inputs = tokenizer(prompt, return_tensors="pt")
 
-    generate_ids = model.generate(inputs.input_ids, max_length=30)
+    generate_ids = model.generate(inputs.input_ids, max_new_tokens=1)
     data = tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
   
-    print(data)
-    outputs[i] = data
+    print(data.split('?')[-2].split('\n')[-1])
+    outputs[i] = data.split('?')[-1]
+    print(outputs[i])
 
 
 
-outputs = {o:outputs[o].split('?')[-1] for o in outputs}
+# outputs = {o:outputs[o].split('?')[-1] for o in outputs}
 
 labels = [id_to_target_token[l][1:] for l in examples['label'][:limit]]
 correct = [labels[i] == outputs[i] for i in range(len(labels))]
