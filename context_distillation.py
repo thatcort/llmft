@@ -87,12 +87,13 @@ class ContextDistillationTrainer(Trainer):
         with torch.no_grad():
             teacher_logits = self.teacher(input_ids=input_ids, attention_mask=attention_mask).logits
         
-        student_logits = model(input_ids=input_ids, attention_mask=attention_mask).logits
+        student_out = model(input_ids=input_ids, attention_mask=attention_mask)
+        student_logits = student_out.logits
 
-        teacher_out = nn.functional.log_softmax(teacher_logits, dim=-1)
-        student_out = nn.functional.log_softmax(student_logits, dim=-1)
+        teacher_lsm = nn.functional.log_softmax(teacher_logits, dim=-1)
+        student_lsm = nn.functional.log_softmax(student_logits, dim=-1)
 
-        teacher_loss = F.kl_div(student_out, teacher_out, reduction='batchmean')
+        teacher_loss = F.kl_div(student_lsm, teacher_lsm, reduction='batchmean', log_target=True)
 
         labels = inputs.pop("labels")
         student_loss = self.student_loss_fn(student_logits, labels)
