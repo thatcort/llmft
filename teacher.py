@@ -90,7 +90,7 @@ def load_model(model_name,dataset_name):
             use_auth_token=None
             )
     if "facebook/opt" in model_name:
-        model = OPTWithClassifier.from_pretrained(
+        model = AutoModelForCausalLM.from_pretrained(
                 model_name,
                 from_tf=bool(".ckpt" in model_name),
                 config=config,
@@ -113,3 +113,23 @@ print(model)
 print(tokenizer)
 
 # result = tokenizer(context, padding=padding, max_length=max_seq_length, truncation=False)
+
+outputs = {}
+for i, prompt in enumerate(pattern_examples[:limit]):
+    inputs = tokenizer(prompt, return_tensors="pt")
+
+    generate_ids = model.generate(inputs.input_ids, max_length=30)
+    data = tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
+  
+    print(data)
+    outputs[i] = data
+
+
+
+outputs = {o:outputs[o].split('?')[-1] for o in outputs}
+
+labels = [id_to_target_token[l][1:] for l in examples['label'][:limit]]
+correct = [labels[i] == outputs[i] for i in range(len(labels))]
+
+print('Accuracy:', sum(correct) / len(correct))
+print('Minority class:', min(list(outputs.values()).count('Yes'), list(outputs.values()).count('No')) / len(correct))
