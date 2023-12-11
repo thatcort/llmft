@@ -100,19 +100,23 @@ class ContextDistillationTrainer(Trainer):
         #     teacher_input_ids = self.teacherTokenizer.tokenize(input_text)
         # else:
         teacher_input_ids = inputs['input_ids']
+        teacher_attention_mask = inputs['attention_mask']
+        print(f"teacher_input_ids\nType: {type(teacher_input_ids)}\nValue: {teacher_input_ids}")
 
         with torch.no_grad():
-            teacher_logits = self.teacherModel(input_ids=teacher_input_ids, attention_mask=attention_mask).logits
+            teacher_logits = self.teacherModel(input_ids=teacher_input_ids, attention_mask=teacher_attention_mask).logits
 
         # get student input
         student_input_text = input_text
         for i, input in enumerate(input_text):
             student_input_text[i] = input.split('?')[-2].split('\n')[-1] + " ?"
         print("student_input_text:", student_input_text)
-        student_input_ids = self.tokenizer.batch_encode_plus(student_input_text, padding="max_length", max_length=self.max_seq_length)
-        print("student_input_ids:", student_input_ids)
+        student_inputs = self.tokenizer.batch_encode_plus(student_input_text, padding="max_length", max_length=self.max_seq_length, return_tensors="pt")
+        student_input_ids = student_inputs['input_ids'].to(self.args.device)
+        student_attention_mask = student_inputs['attention_mask'].to(self.args.device)
+        print(f"student_input_ids\nType: {type(student_input_ids)}\nValue: {student_input_ids}")
 
-        student_out = model(input_ids=student_input_ids, attention_mask=attention_mask)
+        student_out = model(input_ids=student_input_ids, attention_mask=student_attention_mask)
         student_logits = student_out.logits
 
         teacher_lsm = nn.functional.log_softmax(teacher_logits, dim=-1)
