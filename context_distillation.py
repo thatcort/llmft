@@ -88,20 +88,20 @@ class ContextDistillationTrainer(Trainer):
             self.teacherTokenizer = teacherTokenizer.to(args.device)
 
     def compute_loss(self, model, inputs, return_outputs=False):
-        input_ids = inputs['input_ids']
-        attention_mask = inputs['attention_mask']
-        print(f"Input_ids\ntype:{type(input_ids)}")
+        teacher_input_ids = inputs['input_ids']
+        teacher_attention_mask = inputs['attention_mask']
+        # print(f"Input_ids\ntype:{type(input_ids)}")
 
         # get teacher model logits
         input_text = self.tokenizer.batch_decode(inputs['input_ids'])
-        print("input_text:", input_text)
+        # print("input_text:", input_text)
 
         # if self.teacherTokenizer:
         #     teacher_input_ids = self.teacherTokenizer.tokenize(input_text)
         # else:
-        teacher_input_ids = inputs['input_ids']
-        teacher_attention_mask = inputs['attention_mask']
-        print(f"teacher_input_ids\nType: {type(teacher_input_ids)}\nValue: {teacher_input_ids}")
+            # teacher_input_ids = inputs['input_ids']
+            # teacher_attention_mask = inputs['attention_mask']
+        # print(f"teacher_input_ids\nType: {type(teacher_input_ids)}\nValue: {teacher_input_ids}")
 
         with torch.no_grad():
             teacher_logits = self.teacherModel(input_ids=teacher_input_ids, attention_mask=teacher_attention_mask).logits
@@ -110,11 +110,18 @@ class ContextDistillationTrainer(Trainer):
         student_input_text = input_text
         for i, input in enumerate(input_text):
             student_input_text[i] = input.split('?')[-2].split('\n')[-1] + " ?"
-        print("student_input_text:", student_input_text)
+        # print("student_input_text:", student_input_text)
         student_inputs = self.tokenizer.batch_encode_plus(student_input_text, padding="max_length", max_length=self.max_seq_length, return_tensors="pt")
         student_input_ids = student_inputs['input_ids'].to(self.args.device)
         student_attention_mask = student_inputs['attention_mask'].to(self.args.device)
-        print(f"student_input_ids\nType: {type(student_input_ids)}\nValue: {student_input_ids}")
+        # print(f"student_input_ids\nType: {type(student_input_ids)}\nValue: {student_input_ids}")
+
+        # offload memory from cuda
+        teacher_input_ids.to('cpu')
+        teacher_attention_mask.to('cpu')
+        input_text.to('cpu')
+        student_input_text.to('cpu')
+        student_inputs.to('cpu')
 
         student_out = model(input_ids=student_input_ids, attention_mask=student_attention_mask)
         student_logits = student_out.logits
@@ -411,6 +418,7 @@ def main():
     teacher_args = dataclasses.replace(model_args)
     teacher_args.model_name_or_path = 'facebook/opt-1.3b'
     teacherModel, teacherTokenizer, teacherConfig = createModelAndTokenizer(teacher_args, data_args, ft_args, num_labels)
+    teacherModel.eval()
 
     # --------------- Preprocessing the raw_datasets ---------------
 

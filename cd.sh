@@ -27,7 +27,7 @@ sh scripts/misc/setup.sh
 python context_distillation.py \
         --output_dir $OUTPUT_DIR \
         --do_eval \
-        --per_device_eval_batch_size 10 \
+        --per_device_eval_batch_size 8 \
         --fp16 \
         --seed 0 \
         --data_seed 0 \
