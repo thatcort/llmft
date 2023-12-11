@@ -43,7 +43,7 @@ from models.opt_wrapper import OPTWithClassifier, OPTWithLMClassifier
 from models.llama_wrapper import LlamaWithLMClassifier
 from models.gptneox_wrapper import GPTNeoXWithLMClassifier
 import dataclasses
-
+print('Completed import')
 
 ########################################################################################################################################################
 ############### Context Distillation Trainer ###########################################################################################################
@@ -53,8 +53,8 @@ class ContextDistillationTrainer(Trainer):
     def __init__(
             self,
             teacherModel: Union[PreTrainedModel, nn.Module],
-            teacherTokenizer: Optional[PreTrainedTokenizerBase] = None,
             distillation_weight: float,
+            max_seq_length: int,
             student_loss_fn = nn.CrossEntropyLoss(),
             model: Union[PreTrainedModel, nn.Module] = None,
             args: TrainingArguments = None,
@@ -62,6 +62,7 @@ class ContextDistillationTrainer(Trainer):
             train_dataset: Optional[Dataset] = None,
             eval_dataset: Optional[Union[Dataset, Dict[str, Dataset]]] = None,
             tokenizer: Optional[PreTrainedTokenizerBase] = None,
+            teacherTokenizer: Optional[PreTrainedTokenizerBase] = None,
             model_init: Optional[Callable[[], PreTrainedModel]] = None,
             compute_metrics: Optional[Callable[[EvalPrediction], Dict]] = None,
             callbacks: Optional[List[TrainerCallback]] = None,
@@ -79,39 +80,37 @@ class ContextDistillationTrainer(Trainer):
             callbacks,
             optimizers,
             preprocess_logits_for_metrics)
-        self.teacher = teacher.to(args.device)
+        self.teacherModel = teacherModel.to(args.device)
         self.distillation_weight = distillation_weight
         self.student_loss_fn = student_loss_fn
-    
-    # def compute_teacher_logits(self, inputs):
-    #     input_text = self.tokenizer.detokenize(inputs['input_ids'])
-
-    #     # pattern = pattern + input_text
-
-    #     teacher_tokenizer.tokenize(pattern)
-        
-    #     return logits
+        self.max_seq_length = max_seq_length
+        if teacherTokenizer:
+            self.teacherTokenizer = teacherTokenizer.to(args.device)
 
     def compute_loss(self, model, inputs, return_outputs=False):
         input_ids = inputs['input_ids']
         attention_mask = inputs['attention_mask']
-        
+        print(f"Input_ids\ntype:{type(input_ids)}")
 
         # get teacher model logits
-        input_text = self.tokenizer.detokenize(inputs['input_ids'])
+        input_text = self.tokenizer.batch_decode(inputs['input_ids'])
+        print("input_text:", input_text)
 
-        if self.teacherTokenizer:
-            teacher_input_ids = self.teacherTokenizer.tokenize(input_text)
-        else:
-            teacher_input_ids = inputs['input_ids']
+        # if self.teacherTokenizer:
+        #     teacher_input_ids = self.teacherTokenizer.tokenize(input_text)
+        # else:
+        teacher_input_ids = inputs['input_ids']
 
         with torch.no_grad():
-            teacher_logits = self.teacher(input_ids=teacher_input_ids, attention_mask=attention_mask).logits
+            teacher_logits = self.teacherModel(input_ids=teacher_input_ids, attention_mask=attention_mask).logits
 
         # get student input
-        student_input_text = input_text.split('?')[-2].split('\n')[-1]
-        student_input_ids = self.tokenizer.tokenize(student_input_text)
-
+        student_input_text = input_text
+        for i, input in enumerate(input_text):
+            student_input_text[i] = input.split('?')[-2].split('\n')[-1] + " ?"
+        print("student_input_text:", student_input_text)
+        student_input_ids = self.tokenizer.batch_encode_plus(student_input_text, padding="max_length", max_length=self.max_seq_length)
+        print("student_input_ids:", student_input_ids)
 
         student_out = model(input_ids=student_input_ids, attention_mask=attention_mask)
         student_logits = student_out.logits
@@ -406,8 +405,8 @@ def main():
     model, tokenizer, config = createModelAndTokenizer(model_args, data_args, ft_args, num_labels)
 
     teacher_args = dataclasses.replace(model_args)
-    teacher_args.model_name_or_path = 'facebook/opt-13b'
-    teacherModel, teacherTokenizer = createModelAndTokenizer(teacher_args, data_args, ft_args, num_labels)
+    teacher_args.model_name_or_path = 'facebook/opt-1.3b'
+    teacherModel, teacherTokenizer, teacherConfig = createModelAndTokenizer(teacher_args, data_args, ft_args, num_labels)
 
     # --------------- Preprocessing the raw_datasets ---------------
 
@@ -483,12 +482,14 @@ def main():
 
     max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
 
+    id_to_target_token = {idx: t for idx, t in enumerate(target_tokens)}
+
     # Create in-context learning prompt from training data
     context, contex_indices = create_few_shot_context(
         data_args.task_name, 
         raw_datasets["train"], 
         in_context_args.num_shots, 
-        pattern=in_context_args.pattern,
+        pattern=ft_args.pattern,
         label_to_tokens=id_to_target_token,
         separate_shots_by=in_context_args.separate_shots_by, 
         description=in_context_args.task_description,
@@ -499,8 +500,8 @@ def main():
         seed=training_args.data_seed
     )
     # inspect context
-    logger.info("Using the following context:")
-    logger.info(context)
+    print("Using the following context:")
+    print(context)
 
     def preprocess_function(examples):
         # Tokenize the texts
@@ -508,20 +509,22 @@ def main():
         # Apply a pattern to the inputs
         if context != "":
             # we add the context here
-            pattern = f"{context}{in_context_args.pattern}"
+            pattern = f"{context}{ft_args.pattern}"
         else:
-            pattern = in_context_args.pattern
+            pattern = ft_args.pattern
+        # print("preprocess_function pattern:\n", pattern)
 
         if in_context_args.target_prefix != "":
             pattern = f"{pattern} {in_context_args.target_prefix.strip()}"
 
         # Apply a pattern to the inputs
         pattern_examples = [
-            ft_args.pattern.format(
+            pattern.format(
                 text1=examples[sentence1_key][idx],
                 text2=examples[sentence2_key][idx] if sentence2_key is not None else None)
             for idx in range(len(examples[sentence1_key]))
         ]
+        # print("First pattern example:\n", pattern_examples[0])
         args = (pattern_examples,)
         result = tokenizer(*args, padding=padding,
                            max_length=max_seq_length, truncation=True)
@@ -713,7 +716,7 @@ def main():
     # Get the metric function
     if data_args.task_name is not None:
         # use default metrics
-        metric_script = f"/llmft/metrics/glue.py"
+        metric_script = f"{os.getcwd()}/metrics/glue.py"
         if data_args.task_name == "mnli-original":
             metric = datasets.load_metric(path=metric_script, config_name="mnli",
                                           cache_dir=data_args.dataset_cache_dir, keep_in_memory=False)
@@ -788,8 +791,9 @@ def main():
 
 
     trainer = ContextDistillationTrainer(
-        teacher = teacherModel,
+        teacherModel = teacherModel,
         distillation_weight = 0.5,
+        max_seq_length=data_args.max_seq_length,
         model=model,
         args=training_args,
         train_dataset=train_dataset if training_args.do_train else None,

@@ -538,26 +538,26 @@ class InContextLearningArguments:
         default="", metadata={"help": "A description added to the beginning of the context"}
     )
 
-    pattern: Optional[str] = field(
-        default="{text1} {text2} ?", metadata={"help": "The input pattern. We will apply this pattern to every sample of the training and validation datasets."}
-    )
+    # pattern: Optional[str] = field(
+    #     default="{text1} {text2} ?", metadata={"help": "The input pattern. We will apply this pattern to every sample of the training and validation datasets."}
+    # )
 
     target_prefix: Optional[str] = field(
         default="", metadata={"help": "A prefix to be added before the target token."}
     )
 
-    target_tokens: Optional[str] = field(
-        default=None, metadata={"help": "Comma separated list of target tokens when using the lm_head for prediction, e.g. ĠYes,ĠNo"}
-    )
+    # target_tokens: Optional[str] = field(
+    #     default=None, metadata={"help": "Comma separated list of target tokens when using the lm_head for prediction, e.g. ĠYes,ĠNo"}
+    # )
 
-    target_tokens_logits_only: bool = field(
-        default=False,
-        metadata={
-            "help": (
-                "Consider only the logits of the target tokens when selecting the arg max."
-            )
-        },
-    )
+    # target_tokens_logits_only: bool = field(
+    #     default=False,
+    #     metadata={
+    #         "help": (
+    #             "Consider only the logits of the target tokens when selecting the arg max."
+    #         )
+    #     },
+    # )
 
     num_shots: int = field(
         default=0,

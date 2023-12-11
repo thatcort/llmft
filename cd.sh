@@ -5,7 +5,7 @@ export bsz=4
 export num_gpus=1
 export logging_steps=$((max_train_samples / (bsz * num_gpus)))
 export learning_rate=1e-5
-export model_name_or_path="facebook/opt-350m"
+export model_name_or_path="facebook/opt-125m"
 
 export HOME=/storage/ice1/6/5/afischer39/llmft
 export CACHE_BASE_DIR=/storage/ice1/6/5/afischer39/llmft/cache
