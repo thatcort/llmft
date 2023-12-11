@@ -5,3 +5,8 @@ hf_datasets
 hf_lms
 logfiles
 .hypothesis
+.cache
+.triton
+cache
+hf_modules
+reports

@@ -34,14 +34,16 @@ from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import check_min_version, send_example_telemetry
 from transformers.utils.versions import require_version
 
-from options import DataTrainingArguments, ModelArguments, WandbArguments, FtArguments
+from options import DataTrainingArguments, ModelArguments, WandbArguments, FtArguments, InContextLearningArguments
 from utils import create_dir, get_timestamp
 from task_utils import task_to_keys, load_glue_datasets, load_hans_dataset, load_mnli_mismatched_dataset, load_paws_qqp_dataset, load_cola_ood_dataset, save_dataset
+from eval_utils import create_few_shot_context
 from models.gptj_wrapper import GPTJWithClassifier, GPTJWithLMClassifier
 from models.opt_wrapper import OPTWithClassifier, OPTWithLMClassifier
 from models.llama_wrapper import LlamaWithLMClassifier
 from models.gptneox_wrapper import GPTNeoXWithLMClassifier
 import dataclasses
+
 
 ########################################################################################################################################################
 ############### Context Distillation Trainer ###########################################################################################################
@@ -50,7 +52,8 @@ import dataclasses
 class ContextDistillationTrainer(Trainer):
     def __init__(
             self,
-            teacher: Union[PreTrainedModel, nn.Module],
+            teacherModel: Union[PreTrainedModel, nn.Module],
+            teacherTokenizer: Optional[PreTrainedTokenizerBase] = None,
             distillation_weight: float,
             student_loss_fn = nn.CrossEntropyLoss(),
             model: Union[PreTrainedModel, nn.Module] = None,
@@ -80,14 +83,37 @@ class ContextDistillationTrainer(Trainer):
         self.distillation_weight = distillation_weight
         self.student_loss_fn = student_loss_fn
     
+    # def compute_teacher_logits(self, inputs):
+    #     input_text = self.tokenizer.detokenize(inputs['input_ids'])
+
+    #     # pattern = pattern + input_text
+
+    #     teacher_tokenizer.tokenize(pattern)
+        
+    #     return logits
 
     def compute_loss(self, model, inputs, return_outputs=False):
         input_ids = inputs['input_ids']
         attention_mask = inputs['attention_mask']
-        with torch.no_grad():
-            teacher_logits = self.teacher(input_ids=input_ids, attention_mask=attention_mask).logits
         
-        student_out = model(input_ids=input_ids, attention_mask=attention_mask)
+
+        # get teacher model logits
+        input_text = self.tokenizer.detokenize(inputs['input_ids'])
+
+        if self.teacherTokenizer:
+            teacher_input_ids = self.teacherTokenizer.tokenize(input_text)
+        else:
+            teacher_input_ids = inputs['input_ids']
+
+        with torch.no_grad():
+            teacher_logits = self.teacher(input_ids=teacher_input_ids, attention_mask=attention_mask).logits
+
+        # get student input
+        student_input_text = input_text.split('?')[-2].split('\n')[-1]
+        student_input_ids = self.tokenizer.tokenize(student_input_text)
+
+
+        student_out = model(input_ids=student_input_ids, attention_mask=attention_mask)
         student_logits = student_out.logits
 
         teacher_lsm = nn.functional.log_softmax(teacher_logits, dim=-1)
@@ -267,14 +293,14 @@ def main():
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
     parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, TrainingArguments, WandbArguments, FtArguments))
+        (ModelArguments, DataTrainingArguments, TrainingArguments, WandbArguments, FtArguments, InContextLearningArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
         model_args, data_args, training_args, wandb_args, ft_args = parser.parse_json_file(
             json_file=os.path.abspath(sys.argv[1]))
     else:
-        model_args, data_args, training_args, wandb_args, ft_args = parser.parse_args_into_dataclasses()
+        model_args, data_args, training_args, wandb_args, ft_args, in_context_args = parser.parse_args_into_dataclasses()
 
     # Sending telemetry. Tracking the example usage helps us better allocate resources to maintain them. The
     # information sent is the one passed as arguments along with your Python/PyTorch versions.
@@ -380,8 +406,8 @@ def main():
     model, tokenizer, config = createModelAndTokenizer(model_args, data_args, ft_args, num_labels)
 
     teacher_args = dataclasses.replace(model_args)
-    teacher_args.model_name_or_path = 'facebook/opt-1.3b'
-    teacherModel = createModelAndTokenizer(teacher_args, data_args, ft_args, num_labels)[0]
+    teacher_args.model_name_or_path = 'facebook/opt-13b'
+    teacherModel, teacherTokenizer = createModelAndTokenizer(teacher_args, data_args, ft_args, num_labels)
 
     # --------------- Preprocessing the raw_datasets ---------------
 
@@ -457,8 +483,37 @@ def main():
 
     max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
 
+    # Create in-context learning prompt from training data
+    context, contex_indices = create_few_shot_context(
+        data_args.task_name, 
+        raw_datasets["train"], 
+        in_context_args.num_shots, 
+        pattern=in_context_args.pattern,
+        label_to_tokens=id_to_target_token,
+        separate_shots_by=in_context_args.separate_shots_by, 
+        description=in_context_args.task_description,
+        target_prefix=in_context_args.target_prefix,
+        from_indices=in_context_args.sample_indices_file, 
+        balanced=in_context_args.balanced, 
+        shuffle=in_context_args.shuffle,
+        seed=training_args.data_seed
+    )
+    # inspect context
+    logger.info("Using the following context:")
+    logger.info(context)
+
     def preprocess_function(examples):
         # Tokenize the texts
+        
+        # Apply a pattern to the inputs
+        if context != "":
+            # we add the context here
+            pattern = f"{context}{in_context_args.pattern}"
+        else:
+            pattern = in_context_args.pattern
+
+        if in_context_args.target_prefix != "":
+            pattern = f"{pattern} {in_context_args.target_prefix.strip()}"
 
         # Apply a pattern to the inputs
         pattern_examples = [
