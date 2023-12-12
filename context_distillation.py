@@ -103,6 +103,7 @@ class ContextDistillationTrainer(Trainer):
             # teacher_attention_mask = inputs['attention_mask']
         # print(f"teacher_input_ids\nType: {type(teacher_input_ids)}\nValue: {teacher_input_ids}")
 
+        print("Teacher model in evaluation mode?", not self.teacherModel.training)
         with torch.no_grad():
             teacher_logits = self.teacherModel(input_ids=teacher_input_ids, attention_mask=teacher_attention_mask).logits
 
@@ -119,9 +120,9 @@ class ContextDistillationTrainer(Trainer):
         # offload memory from cuda
         teacher_input_ids.to('cpu')
         teacher_attention_mask.to('cpu')
-        input_text.to('cpu')
-        student_input_text.to('cpu')
-        student_inputs.to('cpu')
+        # input_text.to('cpu')
+        # student_input_text.to('cpu')
+        # student_inputs.to('cpu')
 
         student_out = model(input_ids=student_input_ids, attention_mask=student_attention_mask)
         student_logits = student_out.logits
@@ -416,7 +417,7 @@ def main():
     model, tokenizer, config = createModelAndTokenizer(model_args, data_args, ft_args, num_labels)
 
     teacher_args = dataclasses.replace(model_args)
-    teacher_args.model_name_or_path = 'facebook/opt-1.3b'
+    teacher_args.model_name_or_path = 'facebook/opt-350m'
     teacherModel, teacherTokenizer, teacherConfig = createModelAndTokenizer(teacher_args, data_args, ft_args, num_labels)
     teacherModel.eval()
 
@@ -798,10 +799,9 @@ def main():
             eval_datasets = eval_dataset
     else:
         eval_datasets = None
+    print('Eval datasets type:', type(eval_datasets))
 
     
-
-
     trainer = ContextDistillationTrainer(
         teacherModel = teacherModel,
         distillation_weight = 0.5,
