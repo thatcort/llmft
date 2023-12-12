@@ -43,11 +43,15 @@ from models.opt_wrapper import OPTWithClassifier, OPTWithLMClassifier
 from models.llama_wrapper import LlamaWithLMClassifier
 from models.gptneox_wrapper import GPTNeoXWithLMClassifier
 import dataclasses
+
+from torch.cuda.amp import GradScaler, autocast
 print('Completed import')
 
 ########################################################################################################################################################
 ############### Context Distillation Trainer ###########################################################################################################
 ########################################################################################################################################################
+
+scaler = GradScaler()  # For mixed precision training
 
 class ContextDistillationTrainer(Trainer):
     def __init__(
@@ -101,11 +105,13 @@ class ContextDistillationTrainer(Trainer):
         # else:
             # teacher_input_ids = inputs['input_ids']
             # teacher_attention_mask = inputs['attention_mask']
-        # print(f"teacher_input_ids\nType: {type(teacher_input_ids)}\nValue: {teacher_input_ids}")
+        print(f"teacher_input_ids\nType: {type(teacher_input_ids)}\Shape: {teacher_input_ids.size()}\nValue: {teacher_input_ids}")
 
         print("Teacher model in evaluation mode?", not self.teacherModel.training)
         with torch.no_grad():
-            teacher_logits = self.teacherModel(input_ids=teacher_input_ids, attention_mask=teacher_attention_mask).logits
+            with autocast():
+                teacher_logits = self.teacherModel(input_ids=teacher_input_ids, attention_mask=teacher_attention_mask).logits
+        print(f"teacher_logits\Size: {teacher_logits.size()}\nValue: {teacher_logits}")
 
         # get student input
         student_input_text = input_text
@@ -118,14 +124,18 @@ class ContextDistillationTrainer(Trainer):
         # print(f"student_input_ids\nType: {type(student_input_ids)}\nValue: {student_input_ids}")
 
         # offload memory from cuda
+        teacher_logits.to('cpu')
         teacher_input_ids.to('cpu')
         teacher_attention_mask.to('cpu')
         # input_text.to('cpu')
         # student_input_text.to('cpu')
         # student_inputs.to('cpu')
 
-        student_out = model(input_ids=student_input_ids, attention_mask=student_attention_mask)
-        student_logits = student_out.logits
+        with autocast():
+            student_out = model(input_ids=student_input_ids, attention_mask=student_attention_mask)
+            student_logits = student_out.logits
+
+        teacher_logits.to(self.args.device)
 
         teacher_lsm = nn.functional.log_softmax(teacher_logits, dim=-1)
         student_lsm = nn.functional.log_softmax(student_logits, dim=-1)
